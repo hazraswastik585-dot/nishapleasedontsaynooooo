@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classified: 15 August Mission</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Courier+Prime&family=Bangers&display=swap');
+
+        :root {
+            --midnight: #0a0a0c;
+            --glow: #3a86ff;
+            --spidey-red: #e63946;
+            --text-gray: #b0b0b0;
+            --paper: #f0f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--midnight);
+            color: white;
+            font-family: 'Space+Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND EFFECTS --- */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* --- UTILS --- */
+        .hidden { display: none !important; }
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .label {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.7rem;
+            color: var(--spidey-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--spidey-red);
+            padding: 2px 8px;
+            display: inline-block;
+        }
+
+        /* --- ORIGINAL POEM SECTION --- */
+        #poem-section {
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        .poem-container {
+            max-width: 600px;
+            font-style: italic;
+            color: var(--text-gray);
+            font-size: 1.2rem;
+        }
+
+        /* --- SPIDER-MAN REVEAL --- */
+        .big-date {
+            font-family: 'Bangers', cursive;
+            font-size: 5rem;
+            color: white;
+            text-shadow: 4px 4px 0px var(--spidey-red);
+            letter-spacing: 5px;
+            margin: 1rem 0;
+        }
+
+        /* --- POST CREDIT SCENE --- */
+        .wait-text {
+            font-family: 'Bangers', cursive;
+            font-size: 3rem;
+            color: var(--spidey-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* --- THE SOFT SECTION (shontaa monataa) --- */
+        .soft-text {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #ff85a2;
+            font-size: 1.5rem;
+            background: rgba(255, 133, 162, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* --- OFFICE DOCUMENT STYLE --- */
+        .dept-card {
+            background: var(--paper);
+            color: #222;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            font-family: 'Courier Prime', monospace;
+            text-align: left;
+            position: relative;
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.5);
+            border: 1px solid #ddd;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: 3px solid #d90429;
+            color: #d90429;
+            padding: 5px;
+            transform: rotate(15deg);
+            font-weight: bold;
+            opacity: 0.6;
+        }
+
+        /* --- LOADING BAR --- */
+        .loading-container {
+            width: 300px;
+            height: 20px;
+            border: 2px solid white;
+            margin: 20px 0;
+            position: relative;
+        }
+        .loading-bar {
+            height: 100%;
+            background: var(--spidey-red);
+            width: 0%;
+            transition: width 0.2s;
+        }
+
+        /* --- FINAL INVITATION CARD --- */
+        .invitation-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--spidey-red);
+            padding: 3rem;
+            border-radius: 20px;
+            position: relative;
+            max-width: 500px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            min-height: 60px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        #btn-yes { background: white; color: black; z-index: 10; }
+        #btn-no { background: var(--spidey-red); color: white; position: relative; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+
+        .spider-web {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: 
+                radial-gradient(circle at 100% 0%, transparent 0, transparent 40px, white 41px, white 42px, transparent 43px),
+                radial-gradient(circle at 100% 0%, transparent 0, transparent 60px, white 61px, white 62px, transparent 63px),
+                radial-gradient(circle at 100% 0%, transparent 0, transparent 80px, white 81px, white 82px, transparent 83px);
+            opacity: 0.2;
+        }
+
+        /* --- CONFETTI --- */
+        .particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars" id="star-field"></div>
+
+    <!-- 1. ORIGINAL POEM -->
+    <section class="section" id="section-1">
+        <div class="label">Top Secret // Eyes Only</div>
+        <div class="poem-container">
+            <p>Under the glow of a midnight sky,</p>
+            <p>Where stars tell stories as they pass by.</p>
+            <p>A simple thought turned into a plan,</p>
+            <p>Between a girl and a Spidey fan.</p>
+            <br>
+            <p>The city waits with its quiet hum,</p>
+            <p>For the day the webs are finally spun.</p>
+        </div>
+        <button onclick="nextSection(2)" style="margin-top: 40px; background: transparent; border: 1px solid white; color: white;">Next Projector Slide...</button>
+    </section>
+
+    <!-- 2. SPIDER-MAN REVEAL -->
+    <section class="section hidden" id="section-2">
+        <div class="label">Primary Objective</div>
+        <div class="spider-web"></div>
+        <h1 class="big-date">15 AUGUST 🎬🍿</h1>
+        <p style="letter-spacing: 3px;">SPIDER-MAN: ACROSS THE THEATRE SEATS</p>
+        <button onclick="nextSection(3)" style="margin-top: 40px; background: white; color: black;">...Wait, there's more?</button>
+    </section>
+
+    <!-- 3. POST CREDIT LEAD IN -->
+    <section class="section hidden" id="section-3">
+        <div class="label">Classified Post-Credits</div>
+        <h2 class="wait-text">WAIT.</h2>
+        <p>There is one final matter of EXTREME national importance.</p>
+        <button onclick="nextSection(4)" style="margin-top: 20px;">Proceed to Intel</button>
+    </section>
+
+    <!-- 4. ACADEMIC CONCLUSION -->
+    <section class="section hidden" id="section-4">
+        <div class="label">NASA HAS NOT BEEN INFORMED</div>
+        <p style="max-width: 500px; margin-bottom: 20px;">
+            After extensive research,<br>
+            multiple unnecessary calculations,<br>
+            and absolutely zero consultation with qualified professionals...
+        </p>
+        <h2 style="font-family: 'Bangers'; font-size: 3rem;">Conclusion:</h2>
+        <p>We should probably go watch the Spider-Man movie.</p>
+        <p style="font-size: 0.8rem; color: var(--text-gray); margin-top: 10px;">
+            Obviously this is purely academic. I am a responsible citizen.<br>
+            This is field research. CBSE-level field research, actually.
+        </p>
+        <div class="soft-text" id="nishu-ji">
+            shontaa monataa Nishu ji, you are officially invited. 😭
+        </div>
+        <button onclick="nextSection(5)" style="margin-top: 30px; background: var(--spidey-red);">Next Dossier</button>
+    </section>
+
+    <!-- 5. CARE / LOVE SECTION -->
+    <section class="section hidden" id="section-5">
+        <div class="label">PEER REVIEWED EMOTIONS</div>
+        <p>Also, before you start accusing me of being dramatic...</p>
+        <p style="font-size: 1.4rem; margin: 20px 0; max-width: 600px;">
+            "Just know that you are very deeply loved, very genuinely cared for, and very unnecessarily worried about."
+        </p>
+        
+        <div class="dept-card">
+            <div class="stamp">OFFICIAL</div>
+            <p><strong>MEMORANDUM</strong></p>
+            <p>Not in a creepy documentary way. More in a:</p>
+            <p>• 'Did you eat?'<br>• 'Did you sleep?'<br>• 'Why are you overthinking?'<br>• 'Stop stressing yourself out.'</p>
+            <p>kind of way. 😭</p>
+            <hr style="margin: 15px 0; border: 0; border-top: 1px dashed #999;">
+            <p>Basically, you have acquired a completely unofficial 24/7 emotional support department.</p>
+            <p style="font-size: 0.7rem; margin-top: 10px;">
+                Department head: me.<br>
+                Qualifications: questionable.<br>
+                Commitment: unfortunately very high.
+            </p>
+        </div>
+        <button onclick="startLoading()" style="margin-top: 30px;">Initialize Final Mission</button>
+    </section>
+
+    <!-- 6. LOADING SCREEN -->
+    <section class="section hidden" id="section-6">
+        <div class="label">SCIENTIFICALLY QUESTIONABLE</div>
+        <p id="loading-status">Calculating probability of a successful movie plan...</p>
+        <div class="loading-container">
+            <div class="loading-bar" id="bar"></div>
+        </div>
+        <p id="percent">0%</p>
+    </section>
+
+    <!-- 7. FINAL INVITATION -->
+    <section class="section hidden" id="section-7">
+        <div class="invitation-card" id="main-card">
+            <div class="label" style="border-color: white; color: white;">FINAL MISSION BRIEF</div>
+            <h2 style="font-family: 'Bangers'; font-size: 2.5rem; margin: 10px 0;">SO...</h2>
+            <p style="letter-spacing: 2px;">
+                15 AUGUST.<br>
+                SPIDER-MAN. POPCORN. THEATRE.<br>
+                And one very suspiciously enthusiastic idiot.
+            </p>
+            <h3 style="margin-top: 20px;">Will you join the mission? 🕷️🎬</h3>
+            
+            <div class="btn-group">
+                <button id="btn-yes" onclick="acceptMission()">YES, obviously 😌</button>
+                <button id="btn-no" onmouseover="dodgeButton()" onclick="dodgeButton()">No 😭</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. SUCCESS SCREEN -->
+    <section class="section hidden" id="section-8">
+        <h1 class="big-date">MISSION ACCEPTED 🫡</h1>
+        <div class="label">Operation: Spider-Man + Popcorn + 15 August</div>
+        <p style="margin: 20px 0;">Excellent decision, Nishu ji. The research department is thrilled.</p>
+        <div class="dept-card" style="font-size: 0.9rem; padding: 2rem;">
+            <p><strong>REPORTING INSTRUCTIONS:</strong></p>
+            <p>1. Your presence<br>2. Your popcorn opinions<br>3. Zero spoilers<br>4. Reasonable amounts of chaos</p>
+        </div>
+        <p class="soft-text" style="margin-top: 30px;">See you on the 15th, shontaa monataa Nishu ji. 🕷️🍿</p>
+    </section>
+
+    <!-- 9. FAILURE SCREEN -->
+    <section class="section hidden" id="section-9">
+        <h1 style="font-family: 'Bangers'; font-size: 3rem;">MISSION FAILED?</h1>
+        <p>Okay okay 😭 I respect the answer.</p>
+        <p>But the committee remains deeply disappointed.</p>
+        <button onclick="location.reload()" style="margin-top: 20px;">Re-apply for mission</button>
+    </section>
+
+    <script>
+        // --- STAR BACKGROUND ---
+        const starField = document.getElementById('star-field');
+        const starCount = 150;
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+            starField.appendChild(star);
+        }
+
+        // --- NAVIGATION ---
+        function nextSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('section-' + id).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        // --- LOADING SEQUENCE ---
+        function startLoading() {
+            nextSection(6);
+            let progress = 0;
+            const bar = document.getElementById('bar');
+            const percent = document.getElementById('percent');
+            const status = document.getElementById('loading-status');
+            
+            const stages = [
+                {p: 12, t: "Fetching popcorn inventory..."},
+                {p: 34, t: "Consulting Uncle Ben's ghost..."},
+                {p: 67, t: "Practicing web-shooting in the mirror..."},
+                {p: 89, t: "Checking movie tickets (again)..."},
+                {p: 97, t: "ERROR: TOO MUCH EXCITEMENT"}
+            ];
+
+            let stageIdx = 0;
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 5) + 1;
+                if (progress >= stages[stageIdx]?.p) {
+                    status.innerText = stages[stageIdx].t;
+                    stageIdx++;
+                }
+
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    status.innerText = "Proceeding anyway.";
+                    setTimeout(() => nextSection(7), 1000);
+                }
+                bar.style.width = progress + "%";
+                percent.innerText = progress + "%";
+            }, 100);
+        }
+
+        // --- NO BUTTON LOGIC ---
+        let noClicks = 0;
+        const noTexts = [
+            "Are you sure?", 
+            "Think again.", 
+            "That button seems confused.", 
+            "Wrong department.", 
+            "Try the other one 😭", 
+            "Nice attempt.", 
+            "Absolutely not accepting this.", 
+            "The committee rejects this.", 
+            "NO HAS LEFT THE CHAT.", 
+            "Bro really clicked no 😭"
+        ];
+
+        function dodgeButton() {
+            const btnNo = document.getElementById('btn-no');
+            const card = document.getElementById('main-card');
+            
+            if (noClicks < 10) {
+                const cardRect = card.getBoundingClientRect();
+                const btnRect = btnNo.getBoundingClientRect();
+
+                const newX = Math.random() * (cardRect.width - btnRect.width);
+                const newY = Math.random() * (cardRect.height - btnRect.height);
+
+                btnNo.style.position = 'absolute';
+                btnNo.style.left = newX + 'px';
+                btnNo.style.top = newY + 'px';
+                
+                btnNo.innerText = noTexts[noClicks % noTexts.length];
+                noClicks++;
+            } else {
+                btnNo.style.position = 'relative';
+                btnNo.style.left = '0';
+                btnNo.style.top = '0';
+                btnNo.innerText = "Fine... 😭";
+                btnNo.onclick = () => nextSection(9);
+            }
+        }
+
+        // --- YES BUTTON LOGIC ---
+        function acceptMission() {
+            createConfetti();
+            setTimeout(() => nextSection(8), 500);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = '50%';
+                p.style.top = '50%';
+                p.style.backgroundColor = Math.random() > 0.5 ? '#e63946' : '#ffffff';
+                document.body.appendChild(p);
+
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 10 + 5;
+                let x = 0;
+                let y = 0;
+                let opacity = 1;
+
+                const move = () => {
+                    x += Math.cos(angle) * velocity;
+                    y += Math.sin(angle) * velocity + 2; // gravity
+                    opacity -= 0.02;
+                    p.style.transform = `translate(${x}px, ${y}px)`;
+                    p.style.opacity = opacity;
+
+                    if (opacity > 0) requestAnimationFrame(move);
+                    else p.remove();
+                };
+                move();
+            }
+        }
+    </script>
+</body>
+</html>
